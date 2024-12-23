@@ -1,3 +1,10 @@
+use std::fs;
+use std::io::{self, Write};
+use std::path::Path;
+use zip::{write::FileOptions, ZipArchive, ZipWriter};
+
 fn main() {
-    println!("Hello, world!");
+    std::process::exit(logic_main());
 }
+
+fn logic_main() -> i32 {}
