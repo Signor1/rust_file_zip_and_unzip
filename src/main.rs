@@ -91,3 +91,27 @@ fn unzip_file(filename: &str) -> i32 {
 
     0
 }
+
+fn zip_file(output_file: &str, files: &[String]) -> i32 {
+    let path = Path::new(output_file);
+    let file = fs::File::create(&path).unwrap();
+    let mut zip = ZipWriter::new(file);
+
+    let options = FileOptions::default().compression_method(zip::CompressionMethod::Stored);
+
+    for file_path in files {
+        let path = Path::new(file_path);
+        if path.is_file() {
+            let mut file = fs::File::open(&path).unwrap();
+            zip.start_file(path.file_name().unwrap().to_string_lossy(), options)
+                .unwrap();
+            io::copy(&mut file, &mut zip).unwrap();
+        } else if path.is_dir() {
+            zip_dir(path, &mut zip, options).unwrap();
+        }
+    }
+
+    zip.finish().unwrap();
+    println!("Created zip file: {}", output_file);
+    0
+}
