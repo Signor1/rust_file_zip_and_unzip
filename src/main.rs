@@ -1,5 +1,5 @@
 use std::fs;
-use std::io::{self, Write};
+use std::io;
 use std::path::Path;
 use zip::{write::FileOptions, ZipArchive, ZipWriter};
 
@@ -114,4 +114,20 @@ fn zip_file(output_file: &str, files: &[String]) -> i32 {
     zip.finish().unwrap();
     println!("Created zip file: {}", output_file);
     0
+}
+
+fn zip_dir(dir: &Path, zip: &mut ZipWriter<fs::File>, options: FileOptions) -> io::Result<()> {
+    for entry in fs::read_dir(dir)? {
+        let entry = entry?;
+        let path = entry.path();
+
+        if path.is_file() {
+            let mut file = fs::File::open(&path)?;
+            zip.start_file(path.file_name().unwrap().to_string_lossy(), options)?;
+            io::copy(&mut file, zip)?;
+        } else if path.is_dir() {
+            zip_dir(&path, zip, options)?;
+        }
+    }
+    Ok(())
 }
