@@ -14,7 +14,7 @@ This project is a Rust-based command-line utility for compressing files into a Z
 ## Installation
 1. Clone this repository:
    ```bash
-   git clone [rust_file_zip_and_unzip](https://github.com/Signor1/rust_file_zip_and_unzip.git)
+   git clone https://github.com/Signor1/rust_file_zip_and_unzip.git
    cd rust_file_zip_and_unzip
    ```
 2. Build the project:
